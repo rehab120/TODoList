@@ -1,0 +1,102 @@
+﻿@model List<Tassk>
+
+@{
+    ViewData["Title"] = "To Do App";
+}
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #f5f5f5;
+    }
+
+    th, td {
+        padding: 10px;
+        border: 1px solid #ccc;
+        text-align: center;
+    }
+
+    th {
+        background-color: #4a148c;
+        color: white;
+    }
+
+    .status-completed {
+        color: green;
+        font-weight: bold;
+    }
+
+    .status-pending {
+        color: orange;
+        font-weight: bold;
+    }
+
+    .status-timeover {
+        color: red;
+        font-weight: bold;
+    }
+
+    a {
+        color: #4a148c;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    h2 {
+        color: #4a148c;
+    }
+
+</style>
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+    <a href="/Task/Create">Create New</a>
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Is Done</th>
+            <th>User ID</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            var task = Model[i];
+            var statusClass = task.Status == Status.Completed ? "status-completed"
+            : task.Status == Status.TimeOver ? "status-timeover"
+            : "status-pending";
+
+            <tr>
+                <td>@(i + 1)</td>
+                <td>@task.Title</td>
+                <td>@task.Description</td>
+                <td class="@statusClass">@task.Status</td>
+                <td>@task.Date.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@(task.IsDone ? "✓" : "✗")</td>
+                <td>@task.User_id</td>
+                <td>
+                    <a href="/Task/Delete/@task.Id" data-id="@task.Id">Delete</a> |
+                    <a href="/Task/Finished/@task.Id">Finished</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
