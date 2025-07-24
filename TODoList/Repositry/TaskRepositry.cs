@@ -44,15 +44,18 @@ namespace TODoList.Repositry
             context.Tasks.Add(task);
             context.SaveChanges();
             task.Status = IsCheckedStatus(task.Id);
-            
-           
-
         }
-        public void Update(Tassk task)
+        public void Update(Tassk task,int id)
         {
-            context.Tasks.Update(task);
-
+            var taskId = GetById(id);
+            taskId.Title = task.Title;
+            taskId.Description = task.Description;
+            taskId.IsDone = task.IsDone;  
+            taskId.Date = task.Date;
+            context.Tasks.Update(taskId);
             context.SaveChanges();
+            taskId.Status = IsCheckedStatus(taskId.
+                Id);
         }
         public void Delete(int id)
         {

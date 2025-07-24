@@ -5,30 +5,8 @@
 }
 
 <style>
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        background-color: #f5f5f5;
-    }
-
-    th, td {
-        padding: 10px;
-        border: 1px solid #ccc;
-        text-align: center;
-    }
-
-    th {
-        background-color: #4a148c;
-        color: white;
-    }
-
     .status-completed {
         color: green;
-        font-weight: bold;
-    }
-
-    .status-pending {
-        color: orange;
         font-weight: bold;
     }
 
@@ -37,66 +15,74 @@
         font-weight: bold;
     }
 
-    a {
-        color: #4a148c;
-        text-decoration: none;
+    .status-pending {
+        color: orange;
         font-weight: bold;
     }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-    body {
-        font-family: Arial, sans-serif;
-    }
-
-    h2 {
-        color: #4a148c;
-    }
-
 </style>
 
-<h2>@ViewData["Title"]</h2>
+<div class="d-flex justify-content-end align-items-center mb-4 pt-2 pb-3">
+    <p class="small mb-0 me-2 text-muted">Filter</p>
+    <select id="statusFilter" class="form-select" style="width: 200px;">
+        <option value="All">All</option>
+        <option value="Pending">Pending</option>
+        <option value="Completed">Completed</option>
+        <option value="TimeOver">TimeOver</option>
+    </select>
+</div>
 
-<p>
-    <a href="/Task/Create">Create New</a>
-</p>
+<div class="row">
+    @foreach (var i in Model)
+    {
+        <div class="col-md-4 mb-4 mt-4 d-flex align-items-stretch task-card" asp-action="Filter" data-id ="@i.Id" data-status="@i.Status">
+            <div class="card h-100" style="width: 100%; background-color: #f8f9fa;">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">@i.Title</h5>
+                    <p class="card-text">
+                        @{
+                            var shortDescription = i.Description.Length > 20
+                            ? i.Description.Substring(0, 20) + "..."
+                            : i.Description;
+                        }
+                        @shortDescription
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    @{
+                        var statusClass = i.Status == Status.Completed ? "status-completed"
+                        : i.Status == Status.TimeOver ? "status-timeover"
+                        : "status-pending";
+                    }
+                    <li class="list-group-item @statusClass">@i.Status.ToString()</li>
+                    <li class="list-group-item">@i.Date</li>
+                </ul>
+                <div class="card-footer mt-auto">
+                    <a href="/Task/Edit/@i.Id" class="btn btn-link" style="color: rgba(47, 6, 150, 0.8);">Edit</a>
+                    <a href="/Task/Delete/@i.Id" class="btn btn-link" style="color: rgba(47, 6, 150, 0.8);" data-id="@i.Id">Delete</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
 
-<table>
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Date</th>
-            <th>Is Done</th>
-            <th>User ID</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @for (int i = 0; i < Model.Count; i++)
-        {
-            var task = Model[i];
-            var statusClass = task.Status == Status.Completed ? "status-completed"
-            : task.Status == Status.TimeOver ? "status-timeover"
-            : "status-pending";
+<div class="d-flex justify-content-end mt-4">
+    <a href="/Task/Add">
+        <button type="button" class="btn btn-primary color-custom">Add New Task</button>
+    </a>
+</div>
 
-            <tr>
-                <td>@(i + 1)</td>
-                <td>@task.Title</td>
-                <td>@task.Description</td>
-                <td class="@statusClass">@task.Status</td>
-                <td>@task.Date.ToString("yyyy-MM-dd HH:mm")</td>
-                <td>@(task.IsDone ? "✓" : "✗")</td>
-                <td>@task.User_id</td>
-                <td>
-                    <a href="/Task/Delete/@task.Id" data-id="@task.Id">Delete</a> |
-                    <a href="/Task/Finished/@task.Id">Finished</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<script>
+    document.getElementById("statusFilter").addEventListener("change", function () {
+        const selectedStatus = this.value;
+        const cards = document.querySelectorAll(".task-card");
+
+        cards.forEach(card => {
+            const taskStatus = card.getAttribute("data-status");
+            if (selectedStatus === "All" || taskStatus === selectedStatus) {
+                card.style.display = "flex";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    });
+</script>

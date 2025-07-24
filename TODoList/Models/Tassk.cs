@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace TODoList.Models
@@ -23,6 +24,7 @@ namespace TODoList.Models
 
         public bool IsDone { get; set; } = false;
 
+        [JsonIgnore]
         public string? User_id { get; set; }
 
         [ForeignKey("User_id")]
