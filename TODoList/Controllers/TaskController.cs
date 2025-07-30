@@ -20,23 +20,29 @@ namespace TODoList.Controllers
 
         public IActionResult GetAll()
         {
+            ViewData["Status"] = "All";
             return View("GetAll", taskRepositry.GetTasks());
         }
 
-        public IActionResult GetById(int id)
-        {
-            var task = taskRepositry.GetById(id);
-            return View(task);
-        }
+        //public IActionResult GetById(int id)
+        //{
+        //    var task = taskRepositry.GetById(id);
+        //    return View(task);
+        //}
 
         [HttpGet]
         public ActionResult Add()
-        { 
+        {
+
             return View();
         }
         [HttpPost]
         public IActionResult Add(Tassk task)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(task); 
+            }
             taskRepositry.Add(task);
             return RedirectToAction("GetAll");
         }
@@ -46,11 +52,6 @@ namespace TODoList.Controllers
             return RedirectToAction("GetAll");
 
         }
-        //public ActionResult Edit(Tassk task) 
-        //{
-        //    taskRepositry.Update(task);
-        //    return View();
-        //}
 
         [HttpGet]
         public ActionResult Edit(int id)
@@ -62,13 +63,33 @@ namespace TODoList.Controllers
         public ActionResult Edit(int id, Tassk task)
         {
             taskRepositry.Update(task,id);
-            return RedirectToAction("GetById", new { Id = task.Id });
+            return RedirectToAction("GetAll", new { Id = task.Id });
         }
 
-        public IActionResult Filter(Status status)
+        public IActionResult Filter(string status)
         {
-            taskRepositry.Filtered(status);
+            ViewData["Status"] = status;
+            
+
+            if (string.IsNullOrEmpty(status) || status == "All")
+            {
+                var allTasks = taskRepositry.GetTasks(); 
+                return View("GetAll", allTasks); 
+            }
+
+            if (Enum.TryParse<Status>(status, out var parsedStatus))
+            {
+                var taskFiltered = taskRepositry.Filtered(parsedStatus);
+                return View("GetAll", taskFiltered);
+            }
+
             return RedirectToAction("GetAll");
+        }
+
+        public IActionResult Finished(int id)
+        {
+            taskRepositry.Finish(id);
+            return View();
         }
 
 

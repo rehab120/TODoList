@@ -2,10 +2,9 @@
 {
     public enum Status
     {
-        
+        All,
         Pending,
         Completed,
-        TimeOver
-        
+        TimeOver 
     }
 }

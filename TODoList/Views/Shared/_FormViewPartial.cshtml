@@ -1,0 +1,29 @@
+﻿@model TODoList.Models.Tassk
+
+@{
+    Layout = null;
+}
+<div class="mb-3">
+    <label asp-for="Title" class="form-label"></label>
+    <input asp-for="Title" class="form-control" />
+    <span asp-validation-for="Title" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Description" class="form-label"></label>
+    <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+    <span asp-validation-for="Description" class="text-danger"></span>
+</div>
+
+<div class="form-check mb-3">
+    <input asp-for="IsDone" class="form-check-input" />
+    <label asp-for="IsDone" class="form-check-label"></label>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Date" class="form-label">Date & Time</label>
+    <input asp-for="Date" class="form-control" />
+    <span asp-validation-for="Date" class="text-danger"></span>
+</div>
+
+<button type="submit" value="Save" class="btn btn-secondary">Submit</button>

@@ -14,8 +14,8 @@ namespace TODoList.Repositry
             this.context = context;
         }
         public List<Tassk> GetTasks() {
-            var tasks = context.Tasks.Include(I=>I.user).ToList();
-            return tasks;
+            return context.Tasks.OrderByDescending(s => s.Date).ToList();
+            
         }
 
         public Tassk GetById(int id)
@@ -41,9 +41,17 @@ namespace TODoList.Repositry
             //{
             //    task.Status = Status.Pending;
             //}
-            context.Tasks.Add(task);
+            Tassk Newtask = new Tassk();
+            Newtask.Id = task.Id;
+            Newtask.Date = task.Date;
+            Newtask.IsDone = task.IsDone;
+            Newtask.Status = task.Status;
+            Newtask.Title = task.Title;
+            Newtask.User_id = task.User_id;
+            Newtask.Description = task.Description;
+            context.Tasks.Add(Newtask);
             context.SaveChanges();
-            task.Status = IsCheckedStatus(task.Id);
+            task.Status = IsCheckedStatus(Newtask.Id);
         }
         public void Update(Tassk task,int id)
         {
@@ -77,14 +85,15 @@ namespace TODoList.Repositry
             var TaskId = GetById(id);
            
             
-                if (TaskId.Date.Date == dateTime.Date && TaskId.IsDone == true)
+                if (TaskId.Date.Date == dateTime.Date && TaskId.IsDone == true || TaskId.Status==Status.Pending && TaskId.IsDone == true)
                 {
                     TaskId.Status = Status.Completed;
                 }
-                else if(TaskId.Date.Date == dateTime.Date  && TaskId.IsDone == false)
+              
+                else if (TaskId.Date.Date == dateTime.Date && TaskId.IsDone == false)
                 {
-                    TaskId.Status = Status.TimeOver;
-                   
+                TaskId.Status = Status.TimeOver;
+
                 }
             else if (TaskId.Date.Date <= dateTime.Date.AddHours(-2) && TaskId.IsDone == false)
             {
@@ -101,7 +110,29 @@ namespace TODoList.Repositry
             return FilteredTask;
         }
 
+        public void Finish(int id)
+        {
+           var task = GetById(id);
+            if (task != null)
+            {
+                if (task.IsDone == false && task.Status == Status.Pending || task.IsDone == false && task.Status == Status.TimeOver || task.IsDone == false && task.Status == Status.Completed)
+                {
+                    task.Status = Status.Completed;
+                    task.IsDone = true;
+                }
+                else
+                {
+                    Console.WriteLine("The Task is Already Finished");
+                }
+                context.Tasks.Update(task);
+                context.SaveChanges();
+            }
+            else
+            {
+                throw new NullReferenceException(nameof(task));
+            }
 
+        }
 
      }
 

@@ -11,5 +11,6 @@ namespace TODoList.IRepositry
         void Delete(int id);
         Status IsCheckedStatus(int id);
         List<Tassk> Filtered(Status status);
+        void Finish(int id);
     }
 }
