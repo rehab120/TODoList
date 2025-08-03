@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Drawing.Printing;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace TODoList.Models
 {
@@ -16,6 +18,9 @@ namespace TODoList.Models
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        [ValidateNever]
+        public ICollection<Contact> Contact { get; set; }
 
     }
 }

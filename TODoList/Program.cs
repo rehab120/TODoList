@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TODoList.IRepositry;
 using TODoList.Models;
@@ -20,6 +21,13 @@ namespace TODoList
                 OptionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 
             });
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options=>
+            {
+                options.Password.RequireUppercase = false;
+                options.Password.RequireDigit = false;
+            }
+            
+            ).AddEntityFrameworkStores<ToDoListContext>();
             builder.Services.AddScoped<ITaskRepositry,TaskRepositry>();
 
 
