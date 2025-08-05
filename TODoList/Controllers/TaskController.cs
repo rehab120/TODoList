@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
@@ -20,8 +21,12 @@ namespace TODoList.Controllers
 
         public IActionResult GetAll()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var results = taskRepositry.GetTasks();
+            var tasksShow = results.Where(e => e.User_id == userId).ToList();
+
             ViewData["Status"] = "All";
-            return View("GetAll", taskRepositry.GetTasks());
+            return View("GetAll", tasksShow);
         }
 
         //public IActionResult GetById(int id)
@@ -39,10 +44,12 @@ namespace TODoList.Controllers
         [HttpPost]
         public IActionResult Add(Tassk task)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!ModelState.IsValid)
             {
                 return View(task); 
             }
+            task.User_id=userId;
             taskRepositry.Add(task);
             return RedirectToAction("GetAll");
         }

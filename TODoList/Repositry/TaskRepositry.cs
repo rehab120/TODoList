@@ -41,6 +41,7 @@ namespace TODoList.Repositry
             //{
             //    task.Status = Status.Pending;
             //}
+           
             Tassk Newtask = new Tassk();
             Newtask.Id = task.Id;
             Newtask.Date = task.Date;

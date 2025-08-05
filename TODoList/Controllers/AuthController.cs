@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using TODoList.IRepositry;
 using TODoList.Models;
 using TODoList.ViewModel;
 
@@ -10,10 +12,13 @@ namespace TODoList.Controllers
     {
         private readonly UserManager<ApplicationUser> userManger;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly IUserRepositry userRepositry;
+
         ToDoListContext context;
 
-        public AuthController(UserManager<ApplicationUser> userManger, SignInManager<ApplicationUser> signInManager, ToDoListContext context)
+        public AuthController(IUserRepositry userRepositry,UserManager<ApplicationUser> userManger, SignInManager<ApplicationUser> signInManager, ToDoListContext context)
         {
+            this.userRepositry = userRepositry;
             this.userManger = userManger;
             this.signInManager = signInManager;
             this.context = context;
@@ -39,6 +44,7 @@ namespace TODoList.Controllers
                 if (result.Succeeded)
                 {
                     await userManger.AddToRoleAsync(applicationUser, "User");
+                    await userRepositry.AddUserAsync(applicationUser);
                     await signInManager.SignInAsync(applicationUser, false);
                     return RedirectToAction("Login");
                 }
@@ -49,10 +55,11 @@ namespace TODoList.Controllers
                         ModelState.AddModelError("password", item.Description);
                     }
                 }
+                
 
             }
-           
 
+           
             return View(registerViewModel);
         }
         [HttpGet]
@@ -125,31 +132,7 @@ namespace TODoList.Controllers
             return View(registerViewModel);
         }
 
-        [HttpGet]
-        public IActionResult ContactUs() 
-        { 
-            return View();
-        }
-        [HttpPost]
-        public IActionResult ContactUs(ContactViewModel contactViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                Contact contact = new Contact();
-                contact.Email = contactViewModel.Email;
-                contact.UserName = contactViewModel.UserName;
-                contact.Subject = contactViewModel.Subject;
-                contact.Message = contactViewModel.Message;
-                context.Contacts.Add(contact);
-                context.SaveChanges();
-                //return View(contact);
-                return View("Thanks");
-
-
-            }
-            return View(contactViewModel);
-
-        }
+   
 
     }
 }

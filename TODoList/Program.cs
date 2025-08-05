@@ -29,6 +29,7 @@ namespace TODoList
             
             ).AddEntityFrameworkStores<ToDoListContext>();
             builder.Services.AddScoped<ITaskRepositry,TaskRepositry>();
+            builder.Services.AddScoped<IUserRepositry, UserRepositry>();
 
 
             var app = builder.Build();

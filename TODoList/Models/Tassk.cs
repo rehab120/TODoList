@@ -29,7 +29,7 @@ namespace TODoList.Models
 
         [ForeignKey("User_id")]
         [ValidateNever]
-        public User? user { get; set; }
+        public Users? user { get; set; }
 
 
     }

@@ -5,10 +5,10 @@ namespace TODoList.ViewModel
     public class ContactViewModel
     {
         
-        [Required]
+       
         [MaxLength(20)]
         [MinLength(2)]
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
 
         [Required]
         public string Subject { get; set; }
@@ -21,5 +21,7 @@ namespace TODoList.ViewModel
         [MaxLength(100)]
         [MinLength(2)]
         public string Message { get; set; }
+
+        public string? User_id { get; set; }
     }
 }

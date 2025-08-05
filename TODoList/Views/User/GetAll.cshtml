@@ -1,0 +1,42 @@
+﻿@model IEnumerable<TODoList.ViewModel.AdminRoleModelView>
+
+<h1>Admins</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col color-custom">#</th>
+            <th scope="col" style="color: rgba(47, 6, 150, 0.8);">Name</th>
+            <th scope="col" style="color: rgba(47, 6, 150, 0.8);">Email</th>
+            <th scope="col" style="color: rgba(47, 6, 150, 0.8);">PhoneNumber</th>
+            <th scope="col" style="color: rgba(47, 6, 150, 0.8);">Address</th>
+            <th scope="col" style="color: rgba(47, 6, 150, 0.8);">Action</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model)
+        {
+            <tr data-id="@i.Id">
+                <th scope="row">@i.Id</th>
+                <td>@i.UserName</td>
+                <td>@i.Email</td>
+                <td>@i.PhoneNumber</td>
+                <td>@i.Address</td>
+
+                @* <td><a href="/User/Delete/@i.Id" class="btn btn-link " style="color: rgba(47, 6, 150, 0.8);" data-id="@i.Id">Delete</a></td> *@
+                <td>
+                    <form asp-controller="User" asp-action="Delete" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@i.Id" />
+                        <button type="submit" class="btn btn-link" style="color: rgba(47, 6, 150, 0.8);"
+                                onclick="return confirm('Are you sure you want to delete this user?');">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+ 
+

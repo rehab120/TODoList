@@ -11,7 +11,7 @@ namespace TODoList.Models
             
         }
         public DbSet<Tassk> Tasks { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Users> Users { get; set; }
         public DbSet<Contact> Contacts { get; set; }
 
     }

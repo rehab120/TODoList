@@ -10,10 +10,10 @@ namespace TODoList.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        
         [MaxLength(20)]
         [MinLength(2)]
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
 
         [Required]
         public string Subject { get; set; }
@@ -31,7 +31,7 @@ namespace TODoList.Models
 
         [ForeignKey("User_id")]
         [ValidateNever]
-        public User? user { get; set; }
+        public Users? user { get; set; }
 
     }
 }

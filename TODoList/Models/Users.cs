@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace TODoList.Models
 {
-    public class User
+    public class Users
     {
         [Key]
         public string Id { get; set; }

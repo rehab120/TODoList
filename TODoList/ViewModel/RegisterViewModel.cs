@@ -14,11 +14,11 @@ namespace TODoList.ViewModel
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Required]
+        
         [DataType(DataType.Password)]
         [Compare("Password")]
 
-        public string ConfirmPassword { get; set; }
+        public string? ConfirmPassword { get; set; }
         public string? PhoneNumber { get; set; }
 
         public string? Address { get; set; }
