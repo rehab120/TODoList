@@ -2,16 +2,20 @@
 using Microsoft.AspNetCore.Mvc;
 using TODoList.IRepositry;
 using TODoList.Models;
+using TODoList.Services;
 using TODoList.ViewModel;
 
 namespace TODoList.Controllers
 {
     public class UserController : Controller
+
     {
+        private readonly IConfiguration configuration;
         private readonly IUserRepositry userRepositry;
-        public UserController(IUserRepositry userRepositry) 
+        public UserController(IUserRepositry userRepositry, IConfiguration configuration) 
         { 
             this.userRepositry = userRepositry;
+            this.configuration = configuration;
         }
 
         public async Task<IActionResult> GetAll()
@@ -73,6 +77,23 @@ namespace TODoList.Controllers
         {
             await userRepositry.DeleteContact(Id);
             return RedirectToAction("ContactFromAgent");
+        }
+
+  
+        [HttpPost]
+        public IActionResult SendEmail()
+        {
+            string senderName = "To Do List";
+            string senderEmail = "rehaabsayed1200@gmail.com";
+            string username = "Rehab Sayed";
+            string email = "kareemmahd62@gmail.com";
+            string subject = "Welcome message";
+            string message = "Dear " + username + ",\n\n" +
+                "We 're so execute to have join our commuinty";
+
+            var emailSender = new EmailSender(configuration);
+            emailSender.SendEmail(senderName, senderEmail,username,email,subject,message);
+            return View("Thanks");
         }
     }
 }

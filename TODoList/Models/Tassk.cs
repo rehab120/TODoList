@@ -23,6 +23,8 @@ namespace TODoList.Models
         public DateTime Date { get; set; } 
 
         public bool IsDone { get; set; } = false;
+        public bool IsEmailSent { get; set; } = false;
+
 
         [JsonIgnore]
         public string? User_id { get; set; }

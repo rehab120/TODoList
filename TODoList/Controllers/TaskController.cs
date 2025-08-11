@@ -1,10 +1,12 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
+using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using TODoList.IRepositry;
 using TODoList.Models;
+using TODoList.Services;
 
 namespace TODoList.Controllers
 {
@@ -24,6 +26,7 @@ namespace TODoList.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var results = taskRepositry.GetTasks();
             var tasksShow = results.Where(e => e.User_id == userId).ToList();
+            
 
             ViewData["Status"] = "All";
             return View("GetAll", tasksShow);
@@ -80,14 +83,18 @@ namespace TODoList.Controllers
 
             if (string.IsNullOrEmpty(status) || status == "All")
             {
-                var allTasks = taskRepositry.GetTasks(); 
-                return View("GetAll", allTasks); 
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var results = taskRepositry.GetTasks();
+                var tasksShow = results.Where(e => e.User_id == userId).ToList();
+                return View("GetAll", tasksShow); 
             }
 
             if (Enum.TryParse<Status>(status, out var parsedStatus))
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var taskFiltered = taskRepositry.Filtered(parsedStatus);
-                return View("GetAll", taskFiltered);
+                var tasksShow = taskFiltered.Where(e => e.User_id == userId).ToList();
+                return View("GetAll", tasksShow);
             }
 
             return RedirectToAction("GetAll");
@@ -98,6 +105,9 @@ namespace TODoList.Controllers
             taskRepositry.Finish(id);
             return View();
         }
+
+     
+
 
 
 

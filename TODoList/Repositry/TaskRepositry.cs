@@ -1,32 +1,39 @@
-﻿using System.Net.Mail;
+﻿using System.Configuration;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TODoList.IRepositry;
 using TODoList.Models;
+using TODoList.Services;
 
 namespace TODoList.Repositry
 {
     public class TaskRepositry : ITaskRepositry
     {
         private readonly ToDoListContext context;
-        public TaskRepositry(ToDoListContext context)
+        private readonly IConfiguration configuration;
+
+        public TaskRepositry(ToDoListContext context, IConfiguration configuration)
         {
             this.context = context;
+            this.configuration = configuration;
         }
-        public List<Tassk> GetTasks() {
+        public List<Tassk> GetTasks()
+        {
             return context.Tasks.OrderByDescending(s => s.Date).ToList();
-            
+
         }
 
         public Tassk GetById(int id)
         {
-            return context.Tasks.Include(I => I.user).FirstOrDefault(s=>s.Id == id);
+            return context.Tasks.Include(I => I.user).FirstOrDefault(s => s.Id == id);
         }
 
         public void Add(Tassk task)
         {
-          
-            
+
+
             //DateTime dateTime = DateTime.Now;
             //if (task.Date.Date == dateTime.Date && task.IsDone == true)
             //{
@@ -41,7 +48,7 @@ namespace TODoList.Repositry
             //{
             //    task.Status = Status.Pending;
             //}
-           
+
             Tassk Newtask = new Tassk();
             Newtask.Id = task.Id;
             Newtask.Date = task.Date;
@@ -52,23 +59,23 @@ namespace TODoList.Repositry
             Newtask.Description = task.Description;
             context.Tasks.Add(Newtask);
             context.SaveChanges();
-            task.Status = IsCheckedStatus(Newtask.Id);
+           // task.Status = IsCheckedStatus(Newtask.Id);
         }
-        public void Update(Tassk task,int id)
+        public void Update(Tassk task, int id)
         {
             var taskId = GetById(id);
             taskId.Title = task.Title;
             taskId.Description = task.Description;
-            taskId.IsDone = task.IsDone;  
+            taskId.IsDone = task.IsDone;
             taskId.Date = task.Date;
             context.Tasks.Update(taskId);
             context.SaveChanges();
-            taskId.Status = IsCheckedStatus(taskId.
-                Id);
+          //  taskId.Status = IsCheckedStatus(taskId.
+               // Id);
         }
         public void Delete(int id)
         {
-            
+
             var TaskId = GetById(id);
             if (TaskId != null)
             {
@@ -80,30 +87,32 @@ namespace TODoList.Repositry
                 throw new NullReferenceException(nameof(TaskId));
             }
         }
-        public Status IsCheckedStatus(int id)
-        {
-            DateTime dateTime = DateTime.Now;
-            var TaskId = GetById(id);
-           
-            
-                if (TaskId.Date.Date == dateTime.Date && TaskId.IsDone == true || TaskId.Status==Status.Pending && TaskId.IsDone == true)
-                {
-                    TaskId.Status = Status.Completed;
-                }
-              
-                else if (TaskId.Date.Date == dateTime.Date && TaskId.IsDone == false)
-                {
-                TaskId.Status = Status.TimeOver;
+        //public Status IsCheckedStatus(int id)
+        //{
+        //    DateTime now = DateTime.Now;
+        //    var task = GetById(id);
 
-                }
-            else if (TaskId.Date.Date <= dateTime.Date.AddHours(-2) && TaskId.IsDone == false)
-            {
-                var email = new MailAddress("rehaabsayed1200@gmail.com", "Rehab");
-                Console.WriteLine($"Warning: Task ID {id} is due soon. Notification sent to {email.Address}");
-            }
-            context.SaveChanges();
-            return TaskId.Status;
-            }
+        //    if (task.IsDone)
+        //    {
+        //        task.Status = Status.Completed;
+        //    }
+        //    else
+        //    {
+
+        //        if (task.Date > now)
+        //        {
+        //            task.Status = Status.Pending;
+        //        }
+        //        else
+        //        {
+        //            task.Status = Status.TimeOver;
+        //        }
+        //    }
+
+        //    context.SaveChanges();
+        //    return task.Status;
+        //}
+
 
         public List<Tassk> Filtered(Status status)
         {
@@ -113,7 +122,7 @@ namespace TODoList.Repositry
 
         public void Finish(int id)
         {
-           var task = GetById(id);
+            var task = GetById(id);
             if (task != null)
             {
                 if (task.IsDone == false && task.Status == Status.Pending || task.IsDone == false && task.Status == Status.TimeOver || task.IsDone == false && task.Status == Status.Completed)
@@ -135,11 +144,9 @@ namespace TODoList.Repositry
 
         }
 
-     }
+       
 
-
-
-
+    }
 
 
     }

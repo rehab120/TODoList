@@ -1,8 +1,10 @@
+using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TODoList.IRepositry;
 using TODoList.Models;
 using TODoList.Repositry;
+using TODoList.Services;
 
 namespace TODoList
 {
@@ -13,6 +15,11 @@ namespace TODoList
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddHangfire(config =>
+            {
+                config.UseSqlServerStorage(builder.Configuration.GetConnectionString("Default"));
+            });
+            builder.Services.AddHangfireServer();
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<ToDoListContext>(
 
@@ -48,10 +55,18 @@ namespace TODoList
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseHangfireDashboard("/dashboard");
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.MapHangfireDashboard(); // /hangfire
+
+            RecurringJob.AddOrUpdate<TaskChecker>(
+                                  x => x.CheckTasks(),
+                                     Cron.Minutely
+                                             );
 
             app.Run();
         }
