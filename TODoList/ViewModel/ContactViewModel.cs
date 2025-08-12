@@ -13,9 +13,8 @@ namespace TODoList.ViewModel
         [Required]
         public string Subject { get; set; }
 
-        [Required]
         [DataType(DataType.EmailAddress)]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Required]
         [MaxLength(100)]

@@ -10,13 +10,15 @@ namespace TODoList.Models
         [Key]
         public int Id { get; set; }
 
+        [Required]
         [MaxLength(30)]
         [MinLength(2)]
-        public string? Title { get; set; }
+        public string Title { get; set; }
 
+        [Required]
         [MaxLength(100)]
         [MinLength(2)]
-        public string? Description { get; set; }
+        public string Description { get; set; }
       
         public Status Status { get; set; } = Status.Pending;
 

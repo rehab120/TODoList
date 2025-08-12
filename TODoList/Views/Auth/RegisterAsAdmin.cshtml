@@ -1,43 +1,32 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@using TODoList.ViewModel
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@using TODoList.ViewModel
 
-}
 @model RegisterViewModel
+
 <style>
     body {
         background-image: url('/images/ac54a128942c750799c2c1fe144d2467.jpg');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        height: 100vh;
+        min-height: 100vh;
         margin: 0;
     }
 
-    .card:hover {
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        transform: translateY(-5px);
-        transition: all 0.3s ease;
+    .card {
+        animation: fadeInUp 0.8s ease-out;
+        border-radius: 10px;
     }
+
+        .card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
 
     .btn-success:hover {
         background-color: #218838;
-        color: white;
         transform: scale(1.03);
         transition: all 0.3s ease;
-    }
-
-    a:hover {
-        color: #006400;
-        text-decoration: none;
-        transition: color 0.3s ease;
     }
 
     input.form-control:hover,
@@ -48,112 +37,83 @@
     }
 
     @@keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
+        from
 
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    {
+        opacity: 0;
+        transform: translateY(30px);
     }
 
-    .card {
-        animation: fadeInUp 0.8s ease-out;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 
-    h4.text-uppercase {
-        animation: fadeInUp 1s ease-in-out;
-        animation-delay: 0.2s;
-        animation-fill-mode: both;
     }
 
-    .form-outline:nth-child(1) {
-        animation: fadeInUp 0.6s ease;
-        animation-delay: 0.4s;
-        animation-fill-mode: both;
+    /* Extra padding on mobile */
+    @@media (max-width: 576px) {
+        .card-body
+
+    {
+        padding: 2rem 1rem;
     }
 
-    .form-outline:nth-child(2) {
-        animation: fadeInUp 0.6s ease;
-        animation-delay: 0.6s;
-        animation-fill-mode: both;
+    h4 {
+        font-size: 1.3rem;
     }
 
-    .form-outline:nth-child(3) {
-        animation: fadeInUp 0.6s ease;
-        animation-delay: 0.8s;
-        animation-fill-mode: both;
+    .btn {
+        font-size: 0.9rem;
     }
 
-    .form-outline:nth-child(4) {
-        animation: fadeInUp 0.6s ease;
-        animation-delay: 1s;
-        animation-fill-mode: both;
     }
-
-    .d-flex.justify-content-center {
-        animation: fadeInUp 0.6s ease;
-        animation-delay: 1.4s;
-        animation-fill-mode: both;
-    }
-
-    p.text-center {
-        animation: fadeInUp 0.6s ease;
-        animation-delay: 1.6s;
-        animation-fill-mode: both;
-    }
-
 </style>
+
 <div class="container h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col-12 col-md-6 col-lg-5 col-xl-4">
-            <div class="card" style="border-radius: 10px;">
-                <div class="card-body p-5">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-4">
+            <div class="card shadow-sm">
+                <div class="card-body p-4 p-md-5">
                     <h4 class="text-center mb-4">Create Account For Admin</h4>
 
                     <form asp-action="RegisterAsAdmin">
-                        <div class="form-outline mb-2">
-                            <input asp-for="UserName" id="formName" class="form-control form-control-sm" />
-                            <label class="form-label" asp-for="UserName"></label>
-                            <span asp-validation-for="UserName"></span>
+                        <div class="mb-3">
+                            <input asp-for="UserName" class="form-control form-control-sm" placeholder="Username" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
                         </div>
 
-                        <div class="form-outline mb-2">
-                            <input asp-for="Email" id="formEmail" class="form-control form-control-sm" />
-                            <label class="form-label" asp-for="Email"></label>
-                            <span asp-validation-for="Email"></span>
+                        <div class="mb-3">
+                            <input asp-for="Email" class="form-control form-control-sm" placeholder="Email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
 
-                        <div class="form-outline mb-2">
-                            <input asp-for="Password" id="formPassword" class="form-control form-control-sm" />
-                            <label class="form-label" asp-for="Password"></label>
-                            <span asp-validation-for="Password"></span>
+                        <div class="mb-3">
+                            <input asp-for="Password" type="password" class="form-control form-control-sm" placeholder="Password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
 
-                        <div class="form-outline mb-2">
-                            <input asp-for="ConfirmPassword" id="formRepeatPassword" class="form-control form-control-sm" />
-                            <label class="form-label" asp-for="ConfirmPassword"></label>
-                            <span asp-validation-for="ConfirmPassword"></span>
-                        </div>
-                        <div class="form-outline mb-2">
-                            <input asp-for="Address" id="formName" class="form-control form-control-sm" />
-                            <label class="form-label" asp-for="Address"></label>
-                            <span asp-validation-for="Address"></span>
-                        </div>
-                        <div class="form-outline mb-2">
-                            <input asp-for="PhoneNumber" id="formName" class="form-control form-control-sm" />
-                            <label class="form-label" asp-for="PhoneNumber"></label>
-                            <span asp-validation-for="PhoneNumber"></span>
+                        <div class="mb-3">
+                            <input asp-for="ConfirmPassword" type="password" class="form-control form-control-sm" placeholder="Confirm Password" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                         </div>
 
-                        <div class="d-flex justify-content-center">
-                            <button type="submit" value="Create" class="btn" style="background-color: #4a148c; color: white;">Register</button>
+                        <div class="mb-3">
+                            <input asp-for="Address" class="form-control form-control-sm" placeholder="Address" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
                         </div>
 
-                        <p class="text-center text-muted mt-2 mb-0">
-                            Already have an account? <a href="/Auth/Login" class="fw-bold text-body"><u>Login</u></a>
+                        <div class="mb-3">
+                            <input asp-for="PhoneNumber" class="form-control form-control-sm" placeholder="Phone Number" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn" style="background-color: #4a148c; color: white;">Register</button>
+                        </div>
+
+                        <p class="text-center text-muted mt-3 mb-0">
+                            Already have an account? <a href="/Auth/Login" class="fw-bold">Login</a>
                         </p>
                     </form>
 
@@ -162,7 +122,3 @@
         </div>
     </div>
 </div>
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-
-}

@@ -31,26 +31,18 @@
 								<div class="contact-wrap w-100 p-md-5 p-4">
 									<form method="POST" asp-action="ContactUs" id="contactForm" name="contactForm" class="contactForm">
 										<div class="row">
-											
-											<div class="col-md-6">
-												<div class="form-group">
-													<span asp-validation-for="Email"></span>
-													<label asp-for="Email" class="label" for="email"></label>
-													<input asp-for ="Email" type="email" class="form-control" name="email" id="email" placeholder="Email">
-												</div>
-											</div>
 											<div class="col-md-12">
 												<div class="form-group">
 													<span asp-validation-for="Subject"></span>
 													<label asp-for="Subject" class="label" for="subject">Subject</label>
-													<input asp-for="Subject"  type="text" class="form-control" name="subject" id="subject" placeholder="Subject">
+													<input asp-for="Subject"  type="text" class="form-control" placeholder="Subject">
 												</div>
 											</div>
 											<div class="col-md-12">
 												<div class="form-group">
 													<span asp-validation-for="Message"></span>
 													<label asp-for="Message" class="label" for="#">Message</label>
-													<textarea asp-for="Message" name="message" class="form-control" id="message" cols="30" rows="4" placeholder="Message"></textarea>
+													<textarea asp-for="Message" class="form-control" cols="30" rows="4" placeholder="Message"></textarea>
 												</div>
 											</div>
 											<div class="col-md-12">

@@ -1,9 +1,9 @@
-﻿using System.Security.Claims;
+﻿using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using TODoList.IRepositry;
 using TODoList.Models;
+using TODoList.Services;
 using TODoList.ViewModel;
 
 namespace TODoList.Controllers
@@ -46,6 +46,15 @@ namespace TODoList.Controllers
                     await userManger.AddToRoleAsync(applicationUser, "User");
                     await userRepositry.AddUserAsync(applicationUser);
                     await signInManager.SignInAsync(applicationUser, false);
+                    BackgroundJob.Enqueue<EmailSender>(x => x.SendEmail(
+                        "To Do List",
+                        "rehaabsayed1200@gmail.com",
+                        applicationUser.UserName,
+                        applicationUser.Email,
+                        "Welcome to To Do List",
+                        $"Dear {applicationUser.UserName},\n\nWelcome to our website! We're excited to have you on board. Start organizing your tasks and boosting your productivity today.\n\nBest regards,\nThe To Do List Team"
+                    ));
+
                     return RedirectToAction("Login");
                 }
                 else

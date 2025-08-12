@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using TODoList.IRepositry;
 using TODoList.Models;
@@ -44,22 +45,32 @@ namespace TODoList.Controllers
         }
 
         [HttpPost]
-        public IActionResult ContactUs(ContactViewModel contactViewModel)
+        public async Task<IActionResult> ContactUs(ContactViewModel contactViewModel)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userName = User.FindFirstValue(ClaimTypes.Name);
+            var email = User.FindFirstValue(ClaimTypes.Email);
 
 
             if (ModelState.IsValid)
             {
                 Contact contact = new Contact();
-                contact.Email = contactViewModel.Email;
+                contact.Email = email;
                 contact.UserName = userName;
                 contact.Subject = contactViewModel.Subject;
                 contact.Message = contactViewModel.Message;
                 contact.User_id = userId;
-                userRepositry.AddContact(contact);
-                return View("Thanks");
+                await userRepositry.AddContact(contact);
+                BackgroundJob.Enqueue<EmailSender>(x => x.SendEmail(
+                    "To Do List",
+                    "rehaabsayed1200@gmail.com",
+                    userName,
+                    email,
+                    "Regarding Your Contact Submission",
+                    $"Dear {userName},\n\nThank you for reaching out to us. We have received your message and our team will get back to you shortly.\n\nBest regards,\nThe To Do List Team"
+                ));
+
+                return RedirectToAction("Index", "Home");
 
 
             }
@@ -80,20 +91,6 @@ namespace TODoList.Controllers
         }
 
   
-        [HttpPost]
-        public IActionResult SendEmail()
-        {
-            string senderName = "To Do List";
-            string senderEmail = "rehaabsayed1200@gmail.com";
-            string username = "Rehab Sayed";
-            string email = "kareemmahd62@gmail.com";
-            string subject = "Welcome message";
-            string message = "Dear " + username + ",\n\n" +
-                "We 're so execute to have join our commuinty";
-
-            var emailSender = new EmailSender(configuration);
-            emailSender.SendEmail(senderName, senderEmail,username,email,subject,message);
-            return View("Thanks");
-        }
+        
     }
 }

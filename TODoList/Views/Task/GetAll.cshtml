@@ -1,12 +1,12 @@
 ﻿@model List<Tassk>
 
 @{
-    ViewData["Title"] = "To Do App";
-}
-@{
+    ViewData["Title"] = "To Do List";
     var selectedStatus = ViewData["Status"]?.ToString();
 }
+
 <style>
+    /* Table Styles */
     table {
         width: 100%;
         border-collapse: collapse;
@@ -17,6 +17,7 @@
         padding: 10px;
         border: 1px solid #ccc;
         text-align: center;
+        word-break: break-word; /* prevent overflow */
     }
 
     th {
@@ -24,45 +25,89 @@
         color: white;
     }
 
-    .status-completed {
-        color: green;
-        font-weight: bold;
-    }
+    /* Status colors */
+    .status-completed { color: green; font-weight: bold; }
+    .status-pending { color: orange; font-weight: bold; }
+    .status-timeover { color: red; font-weight: bold; }
 
-    .status-pending {
-        color: orange;
-        font-weight: bold;
-    }
-
-    .status-timeover {
-        color: red;
-        font-weight: bold;
-    }
-
+    /* Links */
     a {
         color: #4a148c;
         text-decoration: none;
         font-weight: bold;
     }
+    a:hover { text-decoration: underline; }
 
-        a:hover {
-            text-decoration: underline;
-        }
-
-    body {
-        font-family: Arial, sans-serif;
-    }
-
+    /* Heading */
     h2 {
         color: #4a148c;
+    }
+
+    /* Responsive table */
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    /* On small screens, make table rows stack vertically */
+    @@media (max-width: 768px) {
+        table, thead, tbody, th, td, tr {
+            display: block;
+        }
+        thead tr {
+            display: none;
+        }
+        tr {
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #fff;
+        }
+        td {
+            text-align: left;
+            position: relative;
+            padding-left: 50%;
+            border: none;
+            border-bottom: 1px solid #eee;
+        }
+        td:before {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 45%;
+            white-space: nowrap;
+            font-weight: bold;
+            color: #4a148c;
+        }
+        td:nth-of-type(1):before { content: "#"; }
+        td:nth-of-type(2):before { content: "Title"; }
+        td:nth-of-type(3):before { content: "Description"; }
+        td:nth-of-type(4):before { content: "Status"; }
+        td:nth-of-type(5):before { content: "Date"; }
+        td:nth-of-type(6):before { content: "Is Done"; }
+        td:nth-of-type(7):before { content: "Actions"; }
+    }
+
+    /* Custom button */
+    .btn-custom {
+        background-color: #4a148c;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .btn-custom:hover {
+        background-color: #6a1b9a;
+        transform: scale(1.05);
     }
 </style>
 
 <h2>@ViewData["Title"]</h2>
 
-<form method="get" action="/Task/Filter" class="d-flex justify-content-end align-items-center mb-4 pt-2 pb-3">
+<form method="get" action="/Task/Filter" class="d-flex flex-wrap justify-content-end align-items-center mb-4 pt-2 pb-3">
     <p class="small mb-0 me-2 text-muted">Filter</p>
-    <select name="status" class="form-select" style="width: 200px;" onchange="this.form.submit()">
+    <select name="status" class="form-select w-auto" onchange="this.form.submit()">
         <option value="">Selected</option>
         <option value="All" @@(selectedStatus=="All" ? "selected" : "" )>All</option>
         <option value="Pending" @@(selectedStatus=="Pending" ? "selected" : "" )>Pending</option>
@@ -71,64 +116,45 @@
     </select>
 </form>
 
-<table>
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Date</th>
-            <th>Is Done</th>
-            @* <th>User ID</th> *@
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @for (int i = 0; i < Model.Count; i++)
-        {
-            var task = Model[i];
-            var statusClass = task.Status == Status.Completed ? "status-completed"
-            : task.Status == Status.TimeOver ? "status-timeover"
-            : "status-pending";
-
+<div class="table-responsive">
+    <table>
+        <thead>
             <tr>
-                <td>@(i + 1)</td>
-                <td>@task.Title</td>
-                <td>@task.Description</td>
-                <td class="@statusClass">@task.Status</td>
-                <td>@task.Date.ToString("yyyy-MM-dd HH:mm")</td>
-                <td>@(task.IsDone ? "✓" : "✗")</td>
-                @* <td>@task.User_id</td> *@
-                <td>
-                    <a href="/Task/Delete/@task.Id" data-id="@task.Id">Delete</a> |
-                    @* <a href="/Task/Finished/@task.Id">Finished</a> *@
-                    <a href="/Task/Finished/@task.Id">Finished</a> |
-                    <a href="/Task/Edit/@task.Id">Edit</a>
-                </td>
+                <th>#</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Is Done</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
-<div class="d-flex justify-content-end mt-4">
-    <a href="/Task/Add">
-        <button type="button" style="background-color: #4a148c; color: white;">Add New Task</button>
-    </a>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                var task = Model[i];
+                var statusClass = task.Status == Status.Completed ? "status-completed"
+                : task.Status == Status.TimeOver ? "status-timeover"
+                : "status-pending";
+
+                <tr>
+                    <td>@(i + 1)</td>
+                    <td>@task.Title</td>
+                    <td>@task.Description</td>
+                    <td class="@statusClass">@task.Status</td>
+                    <td>@task.Date.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@(task.IsDone ? "✓" : "✗")</td>
+                    <td>
+                        <a href="/Task/Delete/@task.Id">Delete</a> |
+                        <a href="/Task/Finished/@task.Id">Finished</a> |
+                        <a href="/Task/Edit/@task.Id">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
-<style>
-    .btn-custom {
-        background-color: #4a148c; /* بنفسجي غامق */
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 8px;
-        font-weight: bold;
-        transition: background-color 0.3s ease, transform 0.2s ease;
-    }
 
-        .btn-custom:hover {
-            background-color: #6a1b9a; /* بنفسجي أفتح شوية */
-            transform: scale(1.05);
-        }
-</style>
-
+<div class="d-flex justify-content-end mt-4">
+    <a href="/Task/Add" class="btn btn-custom">Add New Task</a>
+</div>
