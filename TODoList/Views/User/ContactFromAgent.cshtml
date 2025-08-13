@@ -1,156 +1,83 @@
-﻿@* @model IEnumerable<TODoList.Models.Contact> *@
-
-@* @{ *@
-@*     ViewData["Title"] = "ContactFromAgent"; *@
-@* } *@
-@* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
-
-@* <style> *@
-@*     table thead.table-dark { *@
-@*         background-color: #6c63ff !important; /* Purple */ *@
-@*     } *@
-
-@*         table thead.table-dark th { *@
-@*             color: white !important; /* White text */ *@
-@*         } *@
-@*     /* Optional: Improve table readability on smaller screens */ *@
-@*     @@media (max-width: 768px) { *@
-@*         table thead *@
-
-@*     { *@
-@*         display: none; /* Hide table headers on small screens */ *@
-@*     } *@
-
-        
-@*     table tbody tr { *@
-@*         display: block; *@
-@*         margin-bottom: 1rem; *@
-@*         background: #fff; *@
-@*         border-radius: 8px; *@
-@*         padding: 0.8rem; *@
-@*         box-shadow: 0 2px 6px rgba(0,0,0,0.1); *@
-@*     } *@
-
-@*     table tbody td { *@
-@*         display: flex; *@
-@*         justify-content: space-between; *@
-@*         padding: 0.4rem 0; *@
-@*         border: none !important; *@
-@*     } *@
-
-@*         table tbody td::before { *@
-@*             content: attr(data-label); *@
-@*             font-weight: bold; *@
-@*             color: #555; *@
-@*         } *@
-
-@*     .btn-link { *@
-@*         padding: 0; *@
-@*     } *@
-
-       
-
-@*     } *@
-@* </style> *@
-
-@* <h1 class="mb-4">Contacts</h1> *@
-
-@* <div class="table-responsive"> *@
-@*     <table class="table table-striped align-middle"> *@
-@*         <thead class="table-dark"> *@
-@*             <tr> *@
-@*                 <th>@Html.DisplayNameFor(model => model.UserName)</th> *@
-@*                 <th>@Html.DisplayNameFor(model => model.Subject)</th> *@
-@*                 <th>@Html.DisplayNameFor(model => model.Email)</th> *@
-@*                 <th>@Html.DisplayNameFor(model => model.Message)</th> *@
-@*                 <th>@Html.DisplayNameFor(model => model.User_id)</th> *@
-@*                 <th>Actions</th> *@
-@*             </tr> *@
-@*         </thead> *@
-@*         <tbody> *@
-@*             @foreach (var item in Model) *@
-@*             { *@
-@*                 <tr> *@
-@*                     <td data-label="User Name">@Html.DisplayFor(modelItem => item.UserName)</td> *@
-@*                     <td data-label="Subject">@Html.DisplayFor(modelItem => item.Subject)</td> *@
-@*                     <td data-label="Email">@Html.DisplayFor(modelItem => item.Email)</td> *@
-@*                     <td data-label="Message">@Html.DisplayFor(modelItem => item.Message)</td> *@
-@*                     <td data-label="User ID">@Html.DisplayFor(modelItem => item.User_id)</td> *@
-@*                     <td data-label="Actions"> *@
-@*                         <form asp-controller="User" asp-action="DeleteContacts" method="post" style="display:inline;"> *@
-@*                             <input type="hidden" name="id" value="@item.Id" /> *@
-@*                             <button type="submit" class="btn btn-link text-danger" *@
-@*                                     onclick="return confirm('Are you sure you want to delete this?');"> *@
-@*                                 Delete *@
-@*                             </button> *@
-@*                         </form> *@
-@*                     </td> *@
-@*                 </tr> *@
-@*             } *@
-@*         </tbody> *@
-@*     </table> *@
-@* </div> *@
+﻿
 @model IEnumerable<TODoList.Models.Contact>
 
 @{
     ViewData["Title"] = "ContactFromAgent";
 }
 
+<style>
+    /* Purple header background with white text */
+    thead {
+        background-color: #4a148c;
+        color: white;
+    }
+
+    /* Mobile responsiveness */
+    @@media (max-width: 768px) {
+        table thead
+
+    {
+        display: none; /* Hide headers on small screens */
+    }
+
+    table tbody tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 10px;
+        background: #f9f9f9;
+    }
+
+    table tbody td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 5px;
+    }
+
+        table tbody td::before {
+            content: attr(data-label);
+            font-weight: bold;
+                color: #4a148c;
+        }
+
+    }
+</style>
+
 <h1>Contacts</h1>
 
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Subject)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Message)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User_id)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="table-responsive">
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Subject)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Message)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User_id)
-                </td>
-                <td>
-                    <form asp-controller="User" asp-action="DeleteContacts" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="@item.Id" />
-                        <button type="submit" class="btn btn-link" style="color: rgba(47, 6, 150, 0.8);"
-                                onclick="return confirm('Are you sure you want to delete this ?');">
-                            Delete
-                        </button>
-
-                    </form>
-
-                </td>
+                <th>@Html.DisplayNameFor(model => model.UserName)</th>
+                <th>@Html.DisplayNameFor(model => model.Subject)</th>
+                <th>@Html.DisplayNameFor(model => model.Email)</th>
+                <th>@Html.DisplayNameFor(model => model.Message)</th>
+                <th>@Html.DisplayNameFor(model => model.User_id)</th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td data-label="User Name">@Html.DisplayFor(modelItem => item.UserName)</td>
+                    <td data-label="Subject">@Html.DisplayFor(modelItem => item.Subject)</td>
+                    <td data-label="Email">@Html.DisplayFor(modelItem => item.Email)</td>
+                    <td data-label="Message">@Html.DisplayFor(modelItem => item.Message)</td>
+                    <td data-label="User ID">@Html.DisplayFor(modelItem => item.User_id)</td>
+                    <td data-label="Actions">
+                        <form asp-controller="User" asp-action="DeleteContacts" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button type="submit" class="btn btn-link" style="color: rgba(47, 6, 150, 0.8);"
+                                    onclick="return confirm('Are you sure you want to delete this ?');">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

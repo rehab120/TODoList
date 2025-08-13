@@ -1,7 +1,6 @@
 ﻿@model List<Tassk>
 
 @{
-    ViewData["Title"] = "To Do List";
     var selectedStatus = ViewData["Status"]?.ToString();
 }
 
@@ -95,6 +94,8 @@
         padding: 10px 20px;
         border-radius: 8px;
         font-weight: bold;
+        margin-bottom: 50px; /* مسافة أسفل الزر */
+
         transition: background-color 0.3s ease, transform 0.2s ease;
     }
     .btn-custom:hover {
@@ -158,3 +159,4 @@
 <div class="d-flex justify-content-end mt-4">
     <a href="/Task/Add" class="btn btn-custom">Add New Task</a>
 </div>
+

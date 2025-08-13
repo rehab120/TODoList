@@ -3,42 +3,64 @@
 @{
     ViewData["Title"] = "GetAllUser";
 }
+
 <style>
-    table-light {
-        background-color: #4a148c !important;
-        color: white !important; /* Keep text readable */
+    /* Purple table header */
+    thead {
+        background-color: #4a148c;
+        color: white;
+    }
+
+    /* Responsive design for small screens */
+    @@media (max-width: 768px) {
+        table thead
+
+    {
+        display: none; /* Hide table headers on small devices */
+    }
+
+    table tbody tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 8px;
+        background: #f9f9f9;
+    }
+
+    table tbody td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px;
+    }
+
+        table tbody td::before {
+            content: attr(data-label);
+            font-weight: bold;
+            color: #4a148c;
+        }
+
     }
 </style>
+
 <h1>Users</h1>
 
 <div class="table-responsive">
     <table class="table table-bordered table-hover">
-        <thead class="table-light">
+        <thead>
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.UserName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Email)
-                </th>
+                <th>@Html.DisplayNameFor(model => model.Id)</th>
+                <th>@Html.DisplayNameFor(model => model.UserName)</th>
+                <th>@Html.DisplayNameFor(model => model.Email)</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UserName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
+                    <td data-label="ID">@Html.DisplayFor(modelItem => item.Id)</td>
+                    <td data-label="User Name">@Html.DisplayFor(modelItem => item.UserName)</td>
+                    <td data-label="Email">@Html.DisplayFor(modelItem => item.Email)</td>
                 </tr>
             }
         </tbody>
