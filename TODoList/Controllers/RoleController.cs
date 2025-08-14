@@ -28,7 +28,7 @@ namespace TODoList.Controllers
                 IdentityResult identityResult = await roleManager.CreateAsync(identityRole);
                 if (identityResult.Succeeded)
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {

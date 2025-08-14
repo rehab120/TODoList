@@ -11,9 +11,10 @@
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        height: 100vh;
+        min-height: 100vh; 
         margin: 0;
     }
+
 
     .card:hover {
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
@@ -103,7 +104,7 @@
 </style>
 
 
-<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+<div class="container d-flex justify-content-center align-items-center py-5">
     <div class="col-12 col-md-6 col-lg-5 col-xl-4">
         <div class="card" style="border-radius: 10px; min-height: 300px;">
             <div class="card-body p-5">
@@ -111,12 +112,12 @@
 
                 <form asp-action="Login" method="post" asp-controller="Auth">
                     <div class="form-outline mb-3">
-                        <input asp-for="UserName" id="formName" class="form-control form-control-sm" placeholder="Username" />
+                        <input asp-for="UserName" id="formName" class="form-control" placeholder="Username" />
                         <span asp-validation-for="UserName"></span>
                     </div>
 
                     <div class="form-outline mb-3">
-                        <input asp-for="Password" id="formPassword" class="form-control form-control-sm" placeholder="Password" />
+                        <input asp-for="Password" id="formPassword" class="form-control" placeholder="Password" />
                         <span asp-validation-for="Password"></span>
                     </div>
 
