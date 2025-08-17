@@ -32,11 +32,6 @@ namespace TODoList.Controllers
             return View("GetAll", tasksShow);
         }
 
-        //public IActionResult GetById(int id)
-        //{
-        //    var task = taskRepositry.GetById(id);
-        //    return View(task);
-        //}
 
         [HttpGet]
         public ActionResult Add()

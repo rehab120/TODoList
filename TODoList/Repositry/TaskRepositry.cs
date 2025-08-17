@@ -87,31 +87,7 @@ namespace TODoList.Repositry
                 throw new NullReferenceException(nameof(TaskId));
             }
         }
-        //public Status IsCheckedStatus(int id)
-        //{
-        //    DateTime now = DateTime.Now;
-        //    var task = GetById(id);
-
-        //    if (task.IsDone)
-        //    {
-        //        task.Status = Status.Completed;
-        //    }
-        //    else
-        //    {
-
-        //        if (task.Date > now)
-        //        {
-        //            task.Status = Status.Pending;
-        //        }
-        //        else
-        //        {
-        //            task.Status = Status.TimeOver;
-        //        }
-        //    }
-
-        //    context.SaveChanges();
-        //    return task.Status;
-        //}
+        
 
 
         public List<Tassk> Filtered(Status status)

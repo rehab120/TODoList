@@ -14,14 +14,12 @@ namespace TODoList.Controllers
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IUserRepositry userRepositry;
 
-        ToDoListContext context;
 
-        public AuthController(IUserRepositry userRepositry,UserManager<ApplicationUser> userManger, SignInManager<ApplicationUser> signInManager, ToDoListContext context)
+        public AuthController(IUserRepositry userRepositry,UserManager<ApplicationUser> userManger, SignInManager<ApplicationUser> signInManager)
         {
             this.userRepositry = userRepositry;
             this.userManger = userManger;
             this.signInManager = signInManager;
-            this.context = context;
             
         }
         [HttpGet]

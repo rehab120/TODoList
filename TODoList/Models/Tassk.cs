@@ -16,7 +16,7 @@ namespace TODoList.Models
         public string Title { get; set; }
 
         [Required]
-        [MaxLength(100)]
+        [MaxLength(2000)]
         [MinLength(2)]
         public string Description { get; set; }
       
